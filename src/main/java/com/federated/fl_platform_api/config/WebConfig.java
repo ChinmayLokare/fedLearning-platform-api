@@ -14,36 +14,36 @@ import java.util.List;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:3000")); // Your frontend origins
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("*")); // Allows all headers
-        configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L); // Optional: How long the preflight response can be cached
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", configuration); // Apply this configuration to /api/** paths
-        // You could register other configurations for other paths if needed
-        // source.registerCorsConfiguration("/**", configuration); // If you want it truly global
-
-        return source;
-    }
-
-
-
 //    @Bean
-//    public WebMvcConfigurer corsConfigurer() {
-//        return new WebMvcConfigurer() {
-//            @Override
-//            public void addCorsMappings(CorsRegistry registry){
-//                registry.addMapping("/api/**")
-//                        .allowedOrigins("http://localhost:5173")
-//                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-//                        .allowedHeaders("*")
-//                        .allowCredentials(true);
-//            }
-//        };
-//        }
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:3000","https://federated-learning-platform-icptj3umx-chinmay-lokares-projects.vercel.app")); // Your frontend origins
+//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+//        configuration.setAllowedHeaders(List.of("*")); // Allows all headers
+//        configuration.setAllowCredentials(true);
+//        configuration.setMaxAge(3600L); // Optional: How long the preflight response can be cached
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration); // Apply this configuration to /api/** paths
+//        // You could register other configurations for other paths if needed
+//        // source.registerCorsConfiguration("/**", configuration); // If you want it truly global
+//
+//        return source;
+//    }
+//
+//
+//
+////    @Bean
+////    public WebMvcConfigurer corsConfigurer() {
+////        return new WebMvcConfigurer() {
+////            @Override
+////            public void addCorsMappings(CorsRegistry registry){
+////                registry.addMapping("/api/**")
+////                        .allowedOrigins("http://localhost:5173")
+////                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+////                        .allowedHeaders("*")
+////                        .allowCredentials(true);
+////            }
+////        };
+////        }
 }
