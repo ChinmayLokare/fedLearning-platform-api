@@ -4,6 +4,7 @@ import com.federated.fl_platform_api.dto.LoginRequest;
 import com.federated.fl_platform_api.dto.RegisterRequest;
 import com.federated.fl_platform_api.exception.UserAlreadyExistsException;
 import com.federated.fl_platform_api.model.User;
+import com.federated.fl_platform_api.repository.UserRepository;
 import com.federated.fl_platform_api.security.JwtTokenProvider;
 import com.federated.fl_platform_api.service.UserService;
 import jakarta.validation.Valid;
@@ -31,13 +32,15 @@ public class AuthController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
+    private final UserRepository userRepository;
 
 
     @Autowired
-    public AuthController(UserService userService, AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider) {
+    public AuthController(UserService userService, AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider, UserRepository userRepository) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/register")
@@ -68,9 +71,11 @@ public class AuthController {
         }
     }
 
+    // AuthController.java
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         try {
+            System.out.println("AUTH_CTRL_LOGIN: Identifier from request: '" + loginRequest.getUsername() + "'");
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getUsername(),
@@ -78,32 +83,44 @@ public class AuthController {
                     )
             );
 
+            String authenticatedPrincipalName = authentication.getName(); // This is UserDetails.getUsername()
+            System.out.println("AUTH_CTRL_LOGIN: Authentication successful. Principal name from Spring Security: '" + authenticatedPrincipalName + "' (Length: " + authenticatedPrincipalName.length() + ")");
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            // User is authenticated.
-            // Generate JWT token
             String jwt = tokenProvider.generateToken(authentication);
+            System.out.println("AUTH_CTRL_LOGIN: JWT generated.");
 
+            System.out.println("AUTH_CTRL_LOGIN_FETCH: Attempting to fetch User entity from repository using username: '" + authenticatedPrincipalName + "'");
 
-            String username;
-            Object principal = authentication.getPrincipal();
-            if (principal instanceof UserDetails) {
-                username = ((UserDetails) principal).getUsername();
-            } else {
-                username = principal.toString(); // Fallback
-            }
+            User appUser = userRepository.findByUsername(authenticatedPrincipalName) // This is a case-sensitive lookup
+                    .orElseThrow(() -> {
+                        String errorMsg = "CRITICAL_ERROR: User entity for username '" + authenticatedPrincipalName + "' not found in repository AFTER successful authentication.";
+                        System.err.println(errorMsg);
+                        // Log details of the principal if it helps
+                        Object principalObj = authentication.getPrincipal();
+                        if (principalObj instanceof UserDetails) {
+                            UserDetails ud = (UserDetails) principalObj;
+                            System.err.println("UserDetails principal details at time of error: Username='" + ud.getUsername() + "', Enabled=" + ud.isEnabled());
+                        } else {
+                            System.err.println("Principal is not UserDetails at time of error: " + principalObj.toString());
+                        }
+                        return new RuntimeException(errorMsg + " Identifier was: " + loginRequest.getUsername());
+                    });
 
-            // Create response body with token and username
+            System.out.println("AUTH_CTRL_LOGIN_FETCH_SUCCESS: User entity fetched: Username='" + appUser.getUsername() + "', Email='" + appUser.getEmail() + "'");
+
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("accessToken", jwt);
             responseBody.put("tokenType", "Bearer");
-            responseBody.put("username", username);
+            responseBody.put("username", appUser.getUsername());
+            responseBody.put("email", appUser.getEmail());
 
             return ResponseEntity.ok(responseBody);
 
         } catch (AuthenticationException e) {
-            // Authentication failed (e.g., bad credentials)
+            System.err.println("AUTH_CTRL_LOGIN_FAILURE: AuthenticationException: " + e.getMessage() + " for identifier: " + loginRequest.getUsername());
             Map<String, String> errorBody = Map.of("error", "Login failed: Invalid username or password.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.APPLICATION_JSON).body(errorBody);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorBody);
         }
     }
 
