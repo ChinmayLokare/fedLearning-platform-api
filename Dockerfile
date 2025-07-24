@@ -58,3 +58,4 @@ EXPOSE 8081
 # --- Set the entrypoint to run the application ---
 # This command will be executed when the container starts
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+
