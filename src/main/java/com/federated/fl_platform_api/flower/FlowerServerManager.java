@@ -41,6 +41,7 @@ public class FlowerServerManager {
         ProcessBuilder pb;
 
          pb = new ProcessBuilder(
+                 "bash",
                 absoluteScriptPath,
                 "--project-id", project.getId().toString(),
                 "--model-path", project.getModelPath(),

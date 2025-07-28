@@ -26,6 +26,7 @@ public class ModelInitializer {
         System.out.println("--- Preparing to Execute Model Initializer ---");
 
         ProcessBuilder pb = new ProcessBuilder(
+                "bash",
                 absoluteScriptPath, // Use the absolute path here
                 "--model", modelType,
                 "--out", outputPath,
