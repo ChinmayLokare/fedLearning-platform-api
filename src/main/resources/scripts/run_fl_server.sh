@@ -1,23 +1,20 @@
-#!/bin/bash
-set -e # Exit immediately if a command exits with a non-zero status.
+#!/bin-bash
+set -e # Exit immediately if a command fails.
 
-echo "[WRAPPER-FL-SH] Activating Python virtual environment..."
+echo "[WRAPPER-FL-SH] Finding Python executable in virtual environment..."
 
-VENV_ACTIVATE="/home/ec2-user/app/venv/bin/activate"
+VENV_PYTHON="/home/ec2-user/app/venv/bin/python3"
 
-if [ ! -f "$VENV_ACTIVATE" ]; then
-    echo "[WRAPPER-FL-ERROR] Virtual environment not found at /home/ec2-user/app/venv"
+if [ ! -f "$VENV_PYTHON" ]; then
+    echo "[WRAPPER-FL-ERROR] Python executable not found at $VENV_PYTHON"
     exit 1
 fi
 
-source "$VENV_ACTIVATE"
+echo "[WRAPPER-FL-SH] Executing script with venv's python..."
 
-echo "[WRAPPER-FL-SH] Environment activated. Executing fl_server.py..."
-
-# Call the correct python script
-python3 src/main/resources/scripts/fl_server.py "$@"
+# --- THIS IS THE FIX ---
+"$VENV_PYTHON" src/main/resources/scripts/fl_server.py "$@"
 
 EXIT_CODE=$?
 echo "[WRAPPER-FL-SH] Python script finished with exit code: $EXIT_CODE"
-
 exit $EXIT_CODE

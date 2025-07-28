@@ -1,28 +1,24 @@
 #!/bin/bash
-set -e # Exit immediately if a command exits with a non-zero status.
+set -e # Exit immediately if a command fails.
 
-echo "[WRAPPER-SH] Activating Python virtual environment..."
+echo "[WRAPPER-SH] Finding Python executable in virtual environment..."
 
-# Define the path to the activation script
-VENV_ACTIVATE="/home/ec2-user/app/venv/bin/activate"
+# Define the absolute path to the python executable inside the venv
+VENV_PYTHON="/home/ec2-user/app/venv/bin/python3"
 
-# Check if the activation script exists
-if [ ! -f "$VENV_ACTIVATE" ]; then
-    echo "[WRAPPER-ERROR] Virtual environment not found at /home/ec2-user/app/venv"
+# Check if the python executable exists
+if [ ! -f "$VENV_PYTHON" ]; then
+    echo "[WRAPPER-ERROR] Python executable not found at $VENV_PYTHON"
     exit 1
 fi
 
-# Activate the virtual environment
-source "$VENV_ACTIVATE"
+echo "[WRAPPER-SH] Executing script with venv's python..."
 
-echo "[WRAPPER-SH] Environment activated. Executing init_model.py..."
-
-# Execute the python script, passing along all arguments ("$@").
-# We can use a relative path because the Java ProcessBuilder sets the working directory.
-python3 src/main/resources/scripts/init_model.py "$@"
+# --- THIS IS THE FIX ---
+# Execute the script using the full path to the venv's python interpreter.
+# We no longer need to run 'source' or 'activate'.
+"$VENV_PYTHON" src/main/resources/scripts/init_model.py "$@"
 
 EXIT_CODE=$?
 echo "[WRAPPER-SH] Python script finished with exit code: $EXIT_CODE"
-
-# Deactivation happens automatically when the script exits
 exit $EXIT_CODE
