@@ -1,45 +1,55 @@
-# flyctl launch added from .gitignore
-**\HELP.md
-#**\target
-!**\.mvn\wrapper\maven-wrapper.jar
-!**\**\src\main\**\target
-!**\**\src\test\**\target
+# ==================================
+# Build artifacts
+# ==================================
+target/
+*.jar
+*.war
+*.ear
 
-### STS ###
-**\.apt_generated
-**\.classpath
-**\.factorypath
-**\.project
-**\.settings
-**\.springBeans
-**\.sts4-cache
+# ==================================
+# Maven
+# ==================================
+.mvn/
+mvnw
+mvnw.cmd
 
-### IntelliJ IDEA ###
-**\.idea
-**\*.iws
-**\*.iml
-**\*.ipr
+# ==================================
+# IDE files
+# ==================================
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.classpath
+.project
+.settings
+.factorypath
 
-### NetBeans ###
-nbproject\private
-nbbuild
-dist
-nbdist
-.nb-gradle
-**\build
-!**\**\src\main\**\build
-!**\**\src\test\**\build
+# ==================================
+# Python
+# ==================================
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+# Datasets
+data/
 
-### VS Code ###
-**\.vscode
+# ==================================
+# Log files and temp files
+# ==================================
+*.log
+*.tmp
+nohup.out
 
-# flyctl launch added from .idea\.gitignore
-# Default ignored files
-.idea\shelf
-.idea\workspace.xml
-# Editor-based HTTP Client requests
-.idea\httpRequests
-# Datasource local storage ignored files
-.idea\dataSources
-.idea\dataSources.local.xml
-fly.toml
+# ==================================
+# OS-specific
+# ==================================
+.DS_Store
+Thumbs.db
