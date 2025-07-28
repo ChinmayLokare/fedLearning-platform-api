@@ -1,33 +1,55 @@
-HELP.md
+# ==================================
+# Build artifacts
+# ==================================
 target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+*.jar
+*.war
+*.ear
 
-### STS ###
-.apt_generated
+# ==================================
+# Maven
+# ==================================
+.mvn/
+mvnw
+mvnw.cmd
+
+# ==================================
+# IDE files
+# ==================================
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
 .classpath
-.factorypath
 .project
 .settings
-.springBeans
-.sts4-cache
+.factorypath
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
+# ==================================
+# Python
+# ==================================
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+# Datasets
+data/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+# ==================================
+# Log files and temp files
+# ==================================
+*.log
+*.tmp
+nohup.out
 
-### VS Code ###
-.vscode/
+# ==================================
+# OS-specific
+# ==================================
+.DS_Store
+Thumbs.db
