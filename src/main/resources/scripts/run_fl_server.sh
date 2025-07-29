@@ -1,4 +1,4 @@
-#!/bin-bash
+#!/bin/bash
 set -e # Exit immediately if a command fails.
 
 echo "[WRAPPER-FL-SH] Finding Python executable in virtual environment..."
@@ -12,7 +12,7 @@ fi
 
 echo "[WRAPPER-FL-SH] Executing script with venv's python..."
 
-# --- THIS IS THE FIX ---
+# Execute the script using the full path to the venv's python interpreter.
 "$VENV_PYTHON" src/main/resources/scripts/fl_server.py "$@"
 
 EXIT_CODE=$?

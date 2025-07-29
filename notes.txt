@@ -1,4 +1,4 @@
-ssh -i "your-key-pair-name.pem" ec2-user@18.222.78.243
+ssh -i "fl-platform-rit-acc-key.pem" ec2-user@18.223.32.663
 
 # Make sure you run this from your local machine, not the SSH session!
 scp -i "path/to/your-key-pair.pem" target/fl-platform-api-0.0.1-SNAPSHOT.jar ec2-user@<Your_EC2_Public_IP>:/home/ec2-user/app/target/
