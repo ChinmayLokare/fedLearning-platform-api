@@ -4,7 +4,7 @@ set -e # Exit immediately if a command fails.
 echo "[WRAPPER-SH] Finding Python executable in virtual environment..."
 
 # Define the absolute path to the python executable inside the venv
-VENV_PYTHON="/home/ec2-user/app/venv/bin/python3"
+VENV_PYTHON="/home/ec2-user/app/venv/bin/python"
 
 # Check if the python executable exists
 if [ ! -f "$VENV_PYTHON" ]; then

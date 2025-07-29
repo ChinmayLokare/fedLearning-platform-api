@@ -3,7 +3,7 @@ set -e # Exit immediately if a command fails.
 
 echo "[WRAPPER-FL-SH] Finding Python executable in virtual environment..."
 
-VENV_PYTHON="/home/ec2-user/app/venv/bin/python3"
+VENV_PYTHON="/home/ec2-user/app/venv/bin/python"
 
 if [ ! -f "$VENV_PYTHON" ]; then
     echo "[WRAPPER-FL-ERROR] Python executable not found at $VENV_PYTHON"
